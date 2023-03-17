@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from './redux/store'
@@ -11,7 +10,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Vite + React</h1>
+      <h1>Vite + React + Redux Vanilla + Tailwind</h1>
       <div className="card">
         <button onClick={() => dispatch(handleIncrement())}>Increment</button>
         <span className="px-10">{count}</span>
