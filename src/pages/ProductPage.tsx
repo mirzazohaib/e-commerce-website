@@ -1,22 +1,23 @@
 import { Badge, Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
+import { Helmet } from 'react-helmet-async'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useContext } from 'react'
+import { toast } from 'react-toastify'
+
 import LoadingBox from '../components/LoadingBox/LoadingBox'
 import MessageBox from '../components/LoadingBox/MessageBox'
 import Rating from '../components/Rating/Rating'
 import { ApiError } from '../types/ApiError'
 import { convertProductToCartItem, getError } from '../utils'
-import { Helmet } from 'react-helmet-async'
-import { useNavigate, useParams } from 'react-router-dom'
 import { useGetProductDetailsBySlugQuery } from '../hooks/productHooks'
-import { useContext } from 'react'
-import { toast } from 'react-toastify'
-import { Store } from '../redux/Store'
+import { store } from '../redux/store'
 
 const ProductPage = () => {
   const params = useParams()
   const { slug } = params
   const { data: product, isLoading, error } = useGetProductDetailsBySlugQuery(slug!)
 
-  const { state, dispatch } = useContext(Store)
+  const { state, dispatch } = useContext(store)
   const { cart } = state
 
   const navigate = useNavigate()

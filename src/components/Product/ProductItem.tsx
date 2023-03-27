@@ -1,15 +1,16 @@
 import { Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { Product } from '../../types/Product'
-import Rating from '../Rating/Rating'
 import { useContext } from 'react'
-import { Store } from '../../redux/Store'
-import { CartItem } from '../../types/Cart'
-import { convertProductToCartItem } from '../../utils'
 import { toast } from 'react-toastify'
 
+import { Product } from '../../types/Product'
+import Rating from '../Rating/Rating'
+import { store } from '../../redux/store'
+import { CartItem } from '../../types/Cart'
+import { convertProductToCartItem } from '../../utils'
+
 function ProductItem({ product }: { product: Product }) {
-  const { state, dispatch } = useContext(Store)
+  const { state, dispatch } = useContext(store)
   const {
     cart: { cartItems }
   } = state

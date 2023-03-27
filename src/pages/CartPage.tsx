@@ -3,9 +3,10 @@ import { Button, Card, Col, ListGroup, Row } from 'react-bootstrap'
 import { Helmet } from 'react-helmet-async'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+
 import { CartItem } from '../types/Cart'
 import MessageBox from '../components/LoadingBox/MessageBox'
-import { Store } from '../redux/Store'
+import { store } from '../redux/store'
 
 const CartPage = () => {
   const navigate = useNavigate()
@@ -16,7 +17,7 @@ const CartPage = () => {
       cart: { cartItems }
     },
     dispatch
-  } = useContext(Store)
+  } = useContext(store)
 
   const updateCartHandler = (item: CartItem, quantity: number) => {
     if (item.countInStock < quantity) {
@@ -75,7 +76,7 @@ const CartPage = () => {
                         <i className="fas fa-plus-circle"></i>
                       </Button>
                     </Col>
-                    <Col md={3}>${item.price}</Col>
+                    <Col md={3}>€{item.price}</Col>
                     <Col md={2}>
                       <Button onClick={() => removeItemHandler(item)} variant={mode}>
                         <i className="fas fa-trash"></i>
@@ -93,7 +94,7 @@ const CartPage = () => {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)} items) : $
+                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)} items) : €
                     {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
                   </h3>
                 </ListGroup.Item>
