@@ -14,8 +14,17 @@ export type Product = {
   numReviews: number
 }
 
-type Category = 'Shirts' | 'Pants' | 'Shorts' | 'Trousers'
+type Category =
+  | 'Shirts'
+  | 'Pants'
+  | 'Shorts'
+  | 'Trousers'
+  | 'T-Shirts'
+  | 'Jackets'
+  | 'Jewelery'
+  | 'Backpack'
+  | 'Jeans'
 
-type Sizes = 'S' | 'M' | 'L' | 'XL'
+type Sizes = 'S' | 'M' | 'L' | 'XL' | 'One'
 
-type Variant = 'White' | 'Black' | 'Red' | 'Green' | 'Blue'
+type Variant = 'White' | 'Black' | 'Red' | 'Green' | 'Blue' | 'Brown' | 'Silver'
