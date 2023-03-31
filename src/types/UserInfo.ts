@@ -3,4 +3,4 @@ export type UserInfo = {
   email: string
   token: string
   isAdmin: boolean
-}
+}[]

@@ -7,7 +7,7 @@ export const useSigninMutation = () =>
   useMutation({
     mutationFn: async ({ email, password }: { email: string; password: string }) =>
       (
-        await apiClient.post<UserInfo>(`api/users/signin`, {
+        await apiClient.post<UserInfo>(`api/users.json`, {
           email,
           password
         })
@@ -26,7 +26,7 @@ export const useSignupMutation = () =>
       password: string
     }) =>
       (
-        await apiClient.post<UserInfo>(`api/users/signup`, {
+        await apiClient.post<UserInfo>(`api/users.json`, {
           name,
           email,
           password

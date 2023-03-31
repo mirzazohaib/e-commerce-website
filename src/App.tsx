@@ -37,6 +37,7 @@ function App() {
     localStorage.removeItem('cartItems')
     window.location.href = '/signin'
   }
+  console.log('userInfo', typeof userInfo)
 
   return (
     <div className="d-flex flex-column vh-100">
@@ -74,19 +75,26 @@ function App() {
                 </Link>
 
                 {userInfo ? (
-                  <NavDropdown className="header-link" title={`Hello, ${userInfo.name}`}>
-                    <LinkContainer to="/profile">
-                      <NavDropdown.Item>User Profile</NavDropdown.Item>
-                    </LinkContainer>
-                    <LinkContainer to="/orderhistory">
-                      <NavDropdown.Item>Order History</NavDropdown.Item>
-                    </LinkContainer>
-                    <NavDropdown.Divider />
-                    <Link className="dropdown-item" to="#signout" onClick={signoutHandler}>
-                      {' '}
-                      Sign Out{' '}
-                    </Link>
-                  </NavDropdown>
+                  <>
+                    {userInfo.map((info) => (
+                      <NavDropdown
+                        key={info.email}
+                        className="header-link"
+                        title={`Hello, ${info.name}`}>
+                        <LinkContainer to="/profile">
+                          <NavDropdown.Item>User Profile</NavDropdown.Item>
+                        </LinkContainer>
+                        <LinkContainer to="/orderhistory">
+                          <NavDropdown.Item>Order History</NavDropdown.Item>
+                        </LinkContainer>
+                        <NavDropdown.Divider />
+                        <Link className="dropdown-item" to="#signout" onClick={signoutHandler}>
+                          {' '}
+                          Sign Out{' '}
+                        </Link>
+                      </NavDropdown>
+                    ))}
+                  </>
                 ) : (
                   <NavDropdown className="header-link" title={`Click to sign in`}>
                     <LinkContainer to="/signin">

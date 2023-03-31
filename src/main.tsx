@@ -9,6 +9,7 @@ import {
 import { HelmetProvider } from 'react-helmet-async'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 import App from './App'
 import HomePage from './pages/HomePage'
@@ -40,13 +41,15 @@ const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <StoreProvider>
-      <HelmetProvider>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </HelmetProvider>
-    </StoreProvider>
+    <GoogleOAuthProvider clientId="16831945362-rjmmhohdecpl2iq4babfa2n11626ueap.apps.googleusercontent.com">
+      <StoreProvider>
+        <HelmetProvider>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </HelmetProvider>
+      </StoreProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 )
