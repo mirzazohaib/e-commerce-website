@@ -7,10 +7,6 @@
   -webkit-text-size-adjust: 100%;
 }
 
-.card {
-  margin-bottom: 12px;
-}
-
 .product-image {
   max-width: 400px;
   width: 100%;
@@ -31,11 +27,19 @@ img.thumbnail {
   max-width: 600px;
 }
 
+.checkout-steps > div {
+  border-bottom: 0.2rem solid #a0a0a0;
+  color: #a0a0a0;
+}
+.checkout-steps > div.active {
+  border-bottom: 0.2rem solid #f08000;
+  color: #f08000;
+}
+
 .dropdown-menu[data-bs-popper] {
   left: auto;
   right: 0;
 }
-
 .btn-primary,
 .btn-outline-primary {
   background-color: #f0c040;
@@ -77,7 +81,44 @@ a.header-link:hover,
 
 .cart-badge {
   position: absolute;
-  margin-left: 12px;
+  color: #f08000;
+  font-weight: bold;
+  margin-left: 16px;
   margin-top: -3px;
-  font-size: small;
+}
+
+/* Sidebar */
+.side-navbar-backdrop {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+}
+
+.side-navbar {
+  width: 340px;
+  height: 100%;
+  position: absolute;
+  left: -350px;
+  background-color: #f5f5f5;
+  transition: 0.5s;
+  z-index: 2;
+}
+
+.active-nav {
+  left: 0;
+}
+
+.side-navbar-user {
+  background-color: #232f3e !important;
+  color: white;
+  font-weight: bold;
+}
+
+button.side-navbar-user:hover {
+  color: white;
 }

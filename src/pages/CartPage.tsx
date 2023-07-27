@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { CartItem } from '../types/Cart'
-import MessageBox from '../components/LoadingBox/MessageBox'
+import MessageBox from '../components/Boxes/MessageBox'
 import { store } from '../redux/store'
 
 const CartPage = () => {

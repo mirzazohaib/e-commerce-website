@@ -7,7 +7,7 @@ import { Product } from '../../types/Product'
 import Rating from '../Rating/Rating'
 import { store } from '../../redux/store'
 import { CartItem } from '../../types/Cart'
-import { convertProductToCartItem } from '../../utils'
+import { convertProductToCartItem } from '../../utils/utils'
 
 function ProductItem({ product }: { product: Product }) {
   const { state, dispatch } = useContext(store)

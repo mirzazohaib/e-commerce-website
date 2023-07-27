@@ -1,22 +1,19 @@
-import { useContext, useEffect } from 'react'
-import {
-  Badge,
-  Button,
-  Container,
-  Form,
-  FormControl,
-  InputGroup,
-  Nav,
-  Navbar,
-  NavDropdown
-} from 'react-bootstrap'
+import { useContext, useEffect, useState } from 'react'
+
+import { Badge, Button, Container, ListGroup, Nav, Navbar, NavDropdown } from 'react-bootstrap'
 import { Link, Outlet } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap'
 import { ToastContainer } from 'react-toastify'
 
-import { store } from './redux/store'
-
 import 'react-toastify/dist/ReactToastify.css'
+
+import { store } from './redux/store'
+import LoadingBox from './components/Boxes/LoadingBox'
+import MessageBox from './components/Boxes/MessageBox'
+import SearchBox from './components/Boxes/Search'
+import { useGetCategoriesQuery } from './hooks/productHooks'
+import { ApiError } from './types/ApiError'
+import { getError } from './utils/utils'
 
 function App() {
   const {
@@ -35,9 +32,14 @@ function App() {
     dispatch({ type: 'USER_SIGNOUT' })
     localStorage.removeItem('userInfo')
     localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentMethod')
     window.location.href = '/signin'
   }
-  console.log('userInfo', typeof userInfo)
+
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false)
+
+  const { data: categories, isLoading, error } = useGetCategoriesQuery()
 
   return (
     <div className="d-flex flex-column vh-100">
@@ -50,22 +52,9 @@ function App() {
           expand="lg">
           <div className="d-flex justify-content-between align-items-center">
             <LinkContainer to="/" className="header-link">
-              <Navbar.Brand>E-commerce Website</Navbar.Brand>
+              <Navbar.Brand>Ecommerce Website</Navbar.Brand>
             </LinkContainer>
-            <Form className="flex-grow-1 d-flex me-auto">
-              <InputGroup>
-                <FormControl
-                  type="text"
-                  name="q"
-                  id="q"
-                  placeholder="Search Products"
-                  aria-label="Search Products"
-                  aria-describedby="button-search"></FormControl>
-                <Button variant="outline-primary" type="submit" id="button-search">
-                  <i className="fas fa-search"></i>
-                </Button>
-              </InputGroup>
-            </Form>
+            <SearchBox />
 
             <Navbar.Collapse>
               <Nav className="w-100 justify-content-end">
@@ -75,28 +64,21 @@ function App() {
                 </Link>
 
                 {userInfo ? (
-                  <>
-                    {userInfo.map((info) => (
-                      <NavDropdown
-                        key={info.email}
-                        className="header-link"
-                        title={`Hello, ${info.name}`}>
-                        <LinkContainer to="/profile">
-                          <NavDropdown.Item>User Profile</NavDropdown.Item>
-                        </LinkContainer>
-                        <LinkContainer to="/orderhistory">
-                          <NavDropdown.Item>Order History</NavDropdown.Item>
-                        </LinkContainer>
-                        <NavDropdown.Divider />
-                        <Link className="dropdown-item" to="#signout" onClick={signoutHandler}>
-                          {' '}
-                          Sign Out{' '}
-                        </Link>
-                      </NavDropdown>
-                    ))}
-                  </>
+                  <NavDropdown className="header-link" title={`Hello, ${userInfo.name}`}>
+                    <LinkContainer to="/profile">
+                      <NavDropdown.Item>User Profile</NavDropdown.Item>
+                    </LinkContainer>
+                    <LinkContainer to="/orderhistory">
+                      <NavDropdown.Item>Order History</NavDropdown.Item>
+                    </LinkContainer>
+                    <NavDropdown.Divider />
+                    <Link className="dropdown-item" to="#signout" onClick={signoutHandler}>
+                      {' '}
+                      Sign Out{' '}
+                    </Link>
+                  </NavDropdown>
                 ) : (
-                  <NavDropdown className="header-link" title={`Click to sign in`}>
+                  <NavDropdown className="header-link" title={`Hello, sign in`}>
                     <LinkContainer to="/signin">
                       <NavDropdown.Item>Sign In</NavDropdown.Item>
                     </LinkContainer>
@@ -108,9 +90,7 @@ function App() {
                 <Link to="/cart" className="nav-link header-link p-0">
                   {
                     <span className="cart-badge">
-                      <Badge bg="warning" text="dark">
-                        {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                      </Badge>
+                      {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                     </span>
                   }
                   <svg fill="#ffffff" viewBox="130 150 200 300" width="40px" height="40px">
@@ -123,7 +103,10 @@ function App() {
           </div>
           <div className="sub-header">
             <div className="d-flex">
-              <Link to="#" className="nav-link header-link p-1">
+              <Link
+                to="#"
+                className="nav-link header-link p-1"
+                onClick={() => setSidebarIsOpen(!sidebarIsOpen)}>
                 <i className="fas fa-bars"></i> All
               </Link>
               {['Todays Deal', 'Gifts', 'On Sale'].map((x) => (
@@ -135,13 +118,60 @@ function App() {
           </div>
         </Navbar>
       </header>
+
+      {sidebarIsOpen && (
+        <div
+          onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+          className="side-navbar-backdrop"></div>
+      )}
+
+      <div
+        className={
+          sidebarIsOpen
+            ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
+            : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+        }>
+        <ListGroup variant="flush">
+          <ListGroup.Item action className="side-navbar-user">
+            <LinkContainer
+              to={userInfo ? `/profile` : `/signin`}
+              onClick={() => setSidebarIsOpen(!sidebarIsOpen)}>
+              <span>{userInfo ? `Hello, ${userInfo.name}` : `Hello, sign in`}</span>
+            </LinkContainer>
+          </ListGroup.Item>
+          <ListGroup.Item>
+            <div className="d-flex justify-content-between align-items-center">
+              <strong>Categories</strong>
+              <Button variant={mode} onClick={() => setSidebarIsOpen(!sidebarIsOpen)}>
+                <i className="fa fa-times" />
+              </Button>
+            </div>
+          </ListGroup.Item>
+          {isLoading ? (
+            <LoadingBox />
+          ) : error ? (
+            <MessageBox variant="danger">{getError(error as ApiError)}</MessageBox>
+          ) : (
+            categories!.map((category) => (
+              <ListGroup.Item action key={category}>
+                <LinkContainer
+                  to={{ pathname: '/search', search: `category=${category}` }}
+                  onClick={() => setSidebarIsOpen(false)}>
+                  <Nav.Link>{category}</Nav.Link>
+                </LinkContainer>
+              </ListGroup.Item>
+            ))
+          )}
+        </ListGroup>
+      </div>
+
       <main>
         <Container className="mt-3">
           <Outlet />
         </Container>
       </main>
       <footer>
-        <div className="text-center">&copy; Copyright, All rights reserved</div>
+        <div className="text-center">All rights reserved</div>
       </footer>
     </div>
   )

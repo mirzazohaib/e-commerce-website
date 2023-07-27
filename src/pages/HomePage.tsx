@@ -1,10 +1,10 @@
 import { Row, Col } from 'react-bootstrap'
 import { Helmet } from 'react-helmet-async'
 
-import LoadingBox from '../components/LoadingBox/LoadingBox'
-import MessageBox from '../components/LoadingBox/MessageBox'
+import LoadingBox from '../components/Boxes/LoadingBox'
+import MessageBox from '../components/Boxes/MessageBox'
 import { ApiError } from '../types/ApiError'
-import { getError } from '../utils'
+import { getError } from '../utils/utils'
 import ProductItem from '../components/Product/ProductItem'
 import { useGetProductsQuery } from '../hooks/productHooks'
 
