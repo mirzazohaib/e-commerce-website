@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import { useSignupMutation } from '../hooks/userHooks'
 import { store } from '../redux/store'
 import { ApiError } from '../types/ApiError'
-import { getError } from '../utils'
+import { getError } from '../utils/utils'
 
 export default function SignupPage() {
   const navigate = useNavigate()

@@ -4,11 +4,11 @@ import { Helmet } from 'react-helmet-async'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
-import LoadingBox from '../components/LoadingBox/LoadingBox'
+import LoadingBox from '../components/Boxes/LoadingBox'
 import { useSigninMutation } from '../hooks/userHooks'
 import { store } from '../redux/store'
 import { ApiError } from '../types/ApiError'
-import { getError } from '../utils'
+import { getError } from '../utils/utils'
 
 export default function SigninPage() {
   const navigate = useNavigate()
